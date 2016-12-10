@@ -1,5 +1,6 @@
 # Hive serde schema validation
 Hive serde for checking data type and display error if data type is not correct.
+
 Instead of convert it to NULL which is a default behavior of hive.
 
 ## Usage
