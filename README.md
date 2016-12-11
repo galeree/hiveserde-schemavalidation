@@ -1,6 +1,8 @@
 # Hive serde schema validation
 Hive serde for checking data type and display error if data type is not correct.
-Instead of convert it to NULL which is a default behavior of hive.
+Instead of convert it to NULL which is a default behavior of hive. 
+Useful when you have data that exported from somewhere else and import it into hive.
+This serde can check whether those exported data have incorrect data type.
 
 ## Usage
 By default, a field delimeter is set to tab but it can be specified using **separatorChar** property.
