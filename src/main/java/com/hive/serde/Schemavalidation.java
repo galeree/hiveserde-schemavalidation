@@ -103,9 +103,9 @@ public class Schemavalidation implements SerDe
 				
 				// Add field value to row object
 				row.add(value);
-			} catch (Exception ie) {
+			} catch (Exception e) {
 				// Throw exception
-				throw new SerDeException(ie.getMessage());
+				throw new SerDeException(e.getMessage());
 			}
 			index += 1;
 		}
@@ -115,101 +115,66 @@ public class Schemavalidation implements SerDe
 	// Method to get field data
 	public Object parseField(String field, TypeInfo fieldTypeInfo) throws Exception {
 		
-		// Get field type in string
+		// Get field type in string format if field type is decimal(X,X) substring it to decimal
 		String fieldType = fieldTypeInfo.getTypeName();
+		if (fieldType.contains("(")) {
+			fieldType = fieldType.substring(0,fieldType.indexOf("("));
+		}
 		
 		// Get exception message
 		String message = String.format("<%s> is not of type %s", field, fieldType.toUpperCase());
 		
+		// If field value is blank or space and field type is not string then return null 
+		if(fieldType.equals(Constants.STRING_TYPE_NAME) && field.trim().equals("")) {
+			return null;
+		}
+		
 		// Check field's data type
-		if (fieldType.equals(Constants.STRING_TYPE_NAME)) {
-			return field;
-		} else{
-			// If field value is blank or space and field type is not string then return null 
-			if (field.trim().equals("")) return null;
-			
-			// If field value is not blank or space check its data type
-			else {
-				// Check INT, SMALLINT and TINYINT data type
-				if (fieldType.equals(Constants.INT_TYPE_NAME) ||
-						fieldType.equals(Constants.SMALLINT_TYPE_NAME) ||
-						fieldType.equals(Constants.TINYINT_TYPE_NAME)) {
-					try {
-						int val = Integer.parseInt(field);
-						return val;
-					} catch (Exception ie) {
-						throw new Exception(message);
-					}
-				}
-				
-				// Check BIGINT data type
-				else if (fieldType.equals(Constants.BIGINT_TYPE_NAME)) {
-					try {
-						Long val = Long.parseLong(field);
-						return val;
-					} catch (Exception ie) {
-						throw new Exception(message);
-					}
-				}
-				
-				// Check double data type
-				else if (fieldType.equals(Constants.DOUBLE_TYPE_NAME)) {
-					try {
-						double val = Double.parseDouble(field);
-						return val;
-					} catch (Exception ie) {
-						throw new Exception(message);
-					}
-				}
-				
-				// Check float data type
-				else if (fieldType.equals(Constants.FLOAT_TYPE_NAME)) {
-					try {
-						float val = Float.parseFloat(field);
-						return val;
-					} catch (Exception ie) {
-						throw new Exception(message);
-					}
-				}
-				
-				// Check boolean data type
-				else if (fieldType.equals(Constants.BOOLEAN_TYPE_NAME)) {
-					if (field.equals("true") || field.equals("1")) {
-						return true;
-					} else if (field.equals("false") || field.equals("0")) {
-						return false;
-					} else {
-						throw new Exception(message);
-					}
-				}
-				
-				// Check decimal data type
-				else if (fieldType.contains("decimal")) {
-					try {
-						HiveDecimal val = HiveDecimal.create(new BigDecimal(field));
-						return val;
-					} catch (Exception ie) {
-						throw new Exception(message);
-					}
-				}
-				
-				// Check timestamp format
-				else if (fieldType.equals(Constants.TIMESTAMP_TYPE_NAME)) {
-					try {
-						// Check timestamp format
-						SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-						fmt.setLenient(true);
-						Date date = fmt.parse(field);
-					    Timestamp val = new Timestamp(date.getTime());
-						return val;
-					} catch (Exception ie) {
-						throw new Exception(message);
-					}
-				}
-				else {
+		try {
+			switch(fieldType) {
+				case Constants.STRING_TYPE_NAME:
 					return field;
-				}
+				case Constants.INT_TYPE_NAME:
+					return Integer.parseInt(field);
+				case Constants.SMALLINT_TYPE_NAME:
+					return Integer.parseInt(field);
+				case Constants.TINYINT_TYPE_NAME:
+					return Integer.parseInt(field);
+				case Constants.BIGINT_TYPE_NAME:
+					return Long.parseLong(field);
+				case Constants.DOUBLE_TYPE_NAME:
+					return Double.parseDouble(field);
+				case Constants.FLOAT_TYPE_NAME:
+					return Float.parseFloat(field);
+				case "decimal":
+					return HiveDecimal.create(new BigDecimal(field));
+				case Constants.BOOLEAN_TYPE_NAME:
+					switch(field) {
+						case "0":
+							return false;
+						case "false":
+							return false;
+						case "1":
+							return true;
+						case "true":
+							return true;
+						default:
+							throw new Exception(message);
+					}
+				case Constants.TIMESTAMP_TYPE_NAME:
+					SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+					fmt.setLenient(true);
+					Date date = fmt.parse(field);
+					return new Timestamp(date.getTime());
+				case Constants.DATE_TYPE_NAME:
+					SimpleDateFormat fmd = new SimpleDateFormat("yyyy-MM-dd");
+					fmd.setLenient(true);
+					return new java.sql.Date(fmd.parse(field).getTime());
+				default:
+					return field;
 			}
+		} catch (Exception e) {
+			throw new Exception(message);
 		}
 	}
 	
