@@ -99,7 +99,7 @@ public class Schemavalidation implements SerDe
 				String field = rowStr[index];
 				
 				// Get field value
-				value = parseField(field, fieldTypeInfo);
+				value = parseField(field, fieldName, fieldTypeInfo);
 				
 				// Add field value to row object
 				row.add(value);
@@ -113,7 +113,7 @@ public class Schemavalidation implements SerDe
 	}
 	
 	// Method to get field data
-	public Object parseField(String field, TypeInfo fieldTypeInfo) throws Exception {
+	public Object parseField(String field, String fieldName, TypeInfo fieldTypeInfo) throws Exception {
 		
 		// Get field type in string format if field type is decimal(X,X) substring it to decimal
 		String fieldType = fieldTypeInfo.getTypeName();
@@ -122,7 +122,7 @@ public class Schemavalidation implements SerDe
 		}
 		
 		// Get exception message
-		String message = String.format("<%s> is not of type %s", field, fieldType.toUpperCase());
+		String message = String.format("In field <%s>, <%s> is not of type %s", fieldName, field, fieldType.toUpperCase());
 		
 		// If field value is blank or space and field type is not string then return null 
 		if(fieldType.equals(Constants.STRING_TYPE_NAME) && field.trim().equals("")) {

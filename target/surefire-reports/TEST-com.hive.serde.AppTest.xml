@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.109" errors="0" skipped="0" tests="1" name="com.hive.serde.AppTest">
+<testsuite failures="0" time="0.832" errors="0" skipped="0" tests="1" name="com.hive.serde.AppTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home/jre/lib"/>
@@ -26,7 +26,7 @@
 "/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="os.name" value="Mac OS X"/>
-    <property name="classworlds.conf" value="/Users/Galle/Documents/workspace/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf2297382164151724559.tmp"/>
+    <property name="classworlds.conf" value="/Users/Galle/Documents/workspace/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf1515403016998415605.tmp"/>
     <property name="sun.jnu.encoding" value="US-ASCII"/>
     <property name="java.library.path" value="/Users/Galle/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
@@ -60,5 +60,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.004" classname="com.hive.serde.AppTest" name="testApp"/>
+  <testcase time="0.003" classname="com.hive.serde.AppTest" name="testApp"/>
 </testsuite>
